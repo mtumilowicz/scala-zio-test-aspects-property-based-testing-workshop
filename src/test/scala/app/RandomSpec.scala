@@ -6,7 +6,7 @@ import zio.Scope
 import zio.test.Assertion.equalTo
 import zio.test._
 
-object RandomTest extends MainSpec {
+object RandomSpec extends MainSpec {
 
   override def spec: Spec[TestEnvironment with Scope, Any] = suite("suite")(
     test("test1") {
