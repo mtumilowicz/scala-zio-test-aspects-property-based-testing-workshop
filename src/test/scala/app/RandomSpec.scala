@@ -3,12 +3,16 @@ package app
 import core.MainSpec
 import generators.AccountGenerators.genAccount
 import generators.ContributorGenerators._
-import zio.Scope
 import zio.test.Assertion.equalTo
 import zio.test.TestAspect.sequential
 import zio.test._
+import zio.{Scope, ZIO}
+
+import java.util.concurrent.atomic.AtomicInteger
 
 object RandomSpec extends MainSpec {
+
+  val counter = new AtomicInteger(0)
 
   override def spec: Spec[TestEnvironment with Scope, Any] = suite("suite")(
     test("test1") {
@@ -60,7 +64,9 @@ object RandomSpec extends MainSpec {
       check(genAccount, genRepositoriesFromFile) { (_, _) =>
         for {
           seed <- TestRandom.getSeed
-          _ <- zio.Console.printLine("gen3 " + seed)
+          _ <- zio.Console.printLine("gen3 " + seed + " " + counter.get())
+          _ = counter.incrementAndGet()
+          _ <- if (seed > 35633369995042L) ZIO.fail("got it!") else ZIO.succeed(1)
         } yield assertTrue(true)
       }
     }
