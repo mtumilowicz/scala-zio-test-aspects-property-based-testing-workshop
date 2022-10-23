@@ -7,6 +7,7 @@
     * https://zio.dev/reference/test/aspects/
     * https://zio.dev/reference/test/property-testing/
     * https://www.zionomicon.com
+    * https://github.com/adamgfraser/0-to-100-with-zio-test
 
 ## test aspects
 * example
@@ -215,6 +216,12 @@
             * map to transform a generator to generate only even integers we are guaranteed that the shrinkings will also contain only even integers.
 
 ## seed
+* TestRandom service provides a testable implementation of the Random service.
+    * works in two modes
+        * serves as a purely functional random number generator
+            * We can set the seed and generate a value based on that seed
+            * The implementation takes care of passing the updated seed through to the next call of the random number generator so we don’t have to deal with it ourselves.
+        * second mode, the TestRandom service can be used where we can “feed” it values of a particular type and then subsequent calls to generate values of that type will return the data we fed to i
 * in TestRandom
     ```
     /**
