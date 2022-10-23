@@ -21,6 +21,7 @@ object RandomSpec extends MainSpec {
     },
     test("gen") {
       check(genAccount) { account =>
+        println(account)
         assertZIO(AccountService.createAccount(account))(equalTo(AccountCreated(account.id)))
       }
     }
