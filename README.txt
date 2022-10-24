@@ -13,11 +13,21 @@
 
 ## preface
 
-* task1: create generator of Account
-    * then derive it using zio-test/magnolia
-* task2: derive generator of Contributor
-    * then switch it to generate Contributor from file `src/test/resources/contributors.txt`
-* task3: create and plug aspect to set specific seed (TestSeed.seed) before each test
+* goals of this workshop
+    * introduction to
+        * functional programming aspects
+        * property based testing
+    * understanding how to use test aspects in practice
+    * creating data generators
+* workshops
+    * task1: implement generator of `Accounts`
+        * then derive it using `zio-test/magnolia`
+        * solution: `AccountGenerators`
+    * task2: derive generator of `Contributors`
+        * then switch it to generate `Contributor` from file `src/test/resources/contributors.txt`
+        * solution: `ContributorGenerators`
+    * task3: implement and plug aspect to set specific seed (`TestSeed.seed`) before each test
+        * solution: `MainSpec`
 
 ## aspect oriented programming
 * lib: caliban
