@@ -234,17 +234,16 @@
                 * then to half that distance, and so on
 
 ## seed
-* TestRandom service provides a testable implementation of the Random service.
-    * works in two modes
-        * serves as a purely functional random number generator
-            * We can set the seed and generate a value based on that seed
-            * The implementation takes care of passing the updated seed through to the next call of the random number generator so we don’t have to deal with it ourselves.
-        * second mode, the TestRandom service can be used where we can “feed” it values of a particular type and then subsequent calls to generate values of that type will return the data we fed to i
-* in TestRandom
-    ```
-    /**
-     * An arbitrary initial seed for the `TestRandom`.
-     */
-    val DefaultData: Data = Data(1071905196, 1911589680)
-    ```
-* we could set/get seed using: TestRandom.getSeed / TestRandom.setSeed
+* TestRandom service
+    * provides a testable implementation of the Random service
+    * serves as a purely functional random number generator
+        * implementation takes care of passing the updated seed
+        * we can set the seed and generate a value based on that seed
+            * default seed
+                ```
+                /**
+                 * An arbitrary initial seed for the `TestRandom`.
+                 */
+                val DefaultData: Data = Data(1071905196, 1911589680)
+                ```
+            * we could set/get seed using: TestRandom.getSeed / TestRandom.setSeed
