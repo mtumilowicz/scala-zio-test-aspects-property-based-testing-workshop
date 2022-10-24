@@ -6,7 +6,7 @@ import generators.ContributorGenerators._
 import zio.test.Assertion.equalTo
 import zio.test.TestAspect.sequential
 import zio.test._
-import zio.{Scope, ZIO}
+import zio.{Random, Schedule, Scope, ZIO}
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -65,6 +65,7 @@ object RandomSpec extends MainSpec {
         for {
           seed <- TestRandom.getSeed
           _ <- zio.Console.printLine("gen3 " + seed + " " + counter.get())
+          _ <- ZIO.attempt(Random.nextInt).repeat(Schedule.recurs(10))
           _ = counter.incrementAndGet()
           _ <- if (seed > 35633369995042L) ZIO.fail("got it!") else ZIO.succeed(1)
         } yield assertTrue(true)

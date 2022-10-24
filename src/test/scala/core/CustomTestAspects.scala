@@ -1,7 +1,7 @@
 package core
 
 import zio.test.{TestAspect, TestAspectAtLeastR, TestEnvironment, TestFailure, TestRandom, TestSuccess}
-import zio.{Trace, ZIO}
+import zio.{Trace, UIO, ZIO}
 
 
 object CustomTestAspects {
@@ -14,6 +14,6 @@ object CustomTestAspects {
       } yield result
     }
 
-  def setSeedBeforeEach(seed: Long): TestAspect[Nothing, Any, Nothing, Any] =
-    TestAspect.before(TestRandom.setSeed(seed))
+  def setSeedBeforeEach(seed: UIO[Long]): TestAspect[Nothing, Any, Nothing, Any] =
+    TestAspect.before(seed.flatMap(TestRandom.setSeed(_)))
 }
