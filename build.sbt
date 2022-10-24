@@ -5,7 +5,7 @@ ThisBuild / organizationName := "example"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "scala-zio-test-aspects-property-based-testing-workshop",
+    name := "scala-zio2-test-aspects-property-based-testing-workshop",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio" % "2.0.2",
       "dev.zio" %% "zio-streams" % "2.0.2",

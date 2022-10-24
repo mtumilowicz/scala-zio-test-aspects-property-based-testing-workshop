@@ -1,4 +1,4 @@
-# scala-zio-test-aspects-property-based-testing-workshop
+# scala-zio2-test-aspects-property-based-testing-workshop
 
 * references
     * [What's Cooking in ZIO Test by Adam Fraser](https://www.youtube.com/watch?v=JtfdcxgQ71E)
