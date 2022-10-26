@@ -1,17 +1,13 @@
 package app
 
-import core.MainSpec
+import core.BaseSpec
 import generators.AccountGenerators.genAccount
 import generators.ContributorGenerators._
 import zio.Scope
 import zio.test.Assertion.{equalTo, isOneOf}
 import zio.test._
 
-import java.util.concurrent.atomic.AtomicInteger
-
-object RandomSpec extends MainSpec {
-
-  val counter = new AtomicInteger(0)
+object GeneratorsSpec extends BaseSpec {
 
   override def spec: Spec[TestEnvironment with Scope, Any] = suite("suite")(
     test("create account test") {
