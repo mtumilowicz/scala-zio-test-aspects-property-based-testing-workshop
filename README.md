@@ -28,6 +28,8 @@
         * solution: `ContributorGenerators`
     * task3: implement and plug aspect to set specific seed (`TestSeed.seed`) before each test
         * solution: `MainSpec`
+    * task4: experiment with intentionally failing some tests to see a seed
+        * try to reproduce problem by setting correct seed in TestSeed
 
 ## aspect oriented programming
 * lib: caliban
