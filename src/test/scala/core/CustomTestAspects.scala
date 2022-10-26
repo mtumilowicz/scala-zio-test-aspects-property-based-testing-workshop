@@ -10,7 +10,7 @@ object CustomTestAspects {
       override def perTest[R >: Nothing <: TestEnvironment, E >: Nothing <: Any]
       (test: ZIO[R, TestFailure[E], TestSuccess])(implicit trace: Trace): ZIO[R, TestFailure[E], TestSuccess] = for {
         seed <- TestRandom.getSeed
-        result <- test.tapError(_ => zio.Console.printLine(s"Test failed when using seed = $seed").orDie)
+        result <- test.tapError(_ => zio.Console.printLine(s"Test failed with seed = $seed").orDie)
       } yield result
     }
 
