@@ -149,6 +149,20 @@
     * order matters
         * repeat(10) @@ timeout(60s)
         * timeout(60s) @@ repeat(10)
+* implementing aspects
+    * when we need access to test itself
+        ```
+        new TestAspect.PerTest.AtLeastR[TestEnvironment] {
+          override def perTest[R >: Nothing <: TestEnvironment, E >: Nothing <: Any]
+          (test: ZIO[R, TestFailure[E], TestSuccess])(implicit trace: Trace): ZIO[R, TestFailure[E], TestSuccess] = for {
+            result <- test // here comes the logic and we have handle to test itself
+          } yield result
+        }
+        ```
+    * when we want to do something independent of test itself
+        * TestAspect.before(zio.Console.printLine("before each"))
+        * TestAspect.beforeAll(zio.Console.printLine("before all")) 
+        * etc
 
 ## property based testing
 * example: ZIO test
