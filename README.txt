@@ -13,6 +13,7 @@
     * https://github.com/adamgfraser/0-to-100-with-zio-test
     * https://docs.spring.io/spring-framework/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html
     * https://dotty.epfl.ch/docs/reference/new-types/polymorphic-function-types.html
+    * https://github.com/zio/zio/issues/4601
 
 ## preface
 
@@ -205,7 +206,7 @@
     * construct generators for each field
     * combine with operators
         * example: flatMap, map, oneOf, zip
-    * recommended: flexible, explicit
+    * recommended: flexible, explicit, composable
     * example
         ```
         val genAccountStatus = Gen.fromIterable(AccountStatus.values)
@@ -228,6 +229,8 @@
             * usually we require objects that are correct/valid for our tests
                 * correct/valid = not complete random
             * only one implicit for each type allowed
+        * not composable
+            * unpack the `DeriveGen` instance to get a `Gen` (composable)
     * example
         * from case classes
             ```
