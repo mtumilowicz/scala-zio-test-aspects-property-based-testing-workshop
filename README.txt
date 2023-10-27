@@ -205,20 +205,58 @@
     * construct generators for each field
     * combine with operators
         * example: flatMap, map, oneOf, zip
+    * recommended: flexible, explicit
     * example
         ```
+        val genAccountStatus = Gen.fromIterable(AccountStatus.values)
+        val genNonEmptyString = Gen.stringBounded(1, 10)(Gen.char).map(NonEmptyString.unsafeFrom)
+
         val genAccount2: Gen[Any, Account] =
           (Gen.uuid <*> // symbolic alias for zip and zipWith; generate values in parallel
-            Gen.fromIterable(AccountStatus.values) <*>
+            genAccountStatus <*>
             Gen.string1(Gen.char)
             ).map { case (uuid, status, str) => Account(AccountId(uuid), status, NonEmptyString.unsafeFrom(str))
           }
         ```
 * auto-deriving generator
+    * not recommended
+        * deriving is macro-based
+            * it is sometime hard to know which generators will be used
+                * especially in case of multi-files imports
+                * we cannot just use `show implicits` IJ option
+        * it is hard to maintain specific constraints in multi-file imports
+            * usually we require objects that are correct/valid for our tests
+                * correct/valid = not complete random
+            * only one implicit for each type allowed
     * example
-        ```
-        val genAccount: Gen[Any, Account] = DeriveGen[Account] // implicit for each field
-        ```
+        * from case classes
+            ```
+            val genAccount: Gen[Any, Account] = DeriveGen[Account] // implicit for each field
+            ```
+        * same file implicits
+            ```
+            val genActiveAccountStatus: Gen[Any, AccountStatus] = Gen.fromIterable(AccountStatus.activeStatuses)
+
+            implicit val deriveActiveAccountStatus = DeriveGen.instance(genActiveAccountStatus)
+
+            val genActiveAccount: Gen[Any, Account] = DeriveGen[Account]
+            ```
+        * multi-file implicits
+            ```
+            object AccountStatusGenerators {
+                val genActiveAccountStatus: Gen[Any, AccountStatus] = Gen.fromIterable(AccountStatus.activeStatuses)
+
+                implicit val deriveActiveAccountStatus = DeriveGen.instance(genActiveAccountStatus)
+            }
+            ```
+            ```
+            import app.AccountStatusGenerators._
+
+            object AccountGenerators {
+
+                val genActiveAccount: Gen[Any, Account] = DeriveGen[Account]
+            }
+            ```
     * lib: https://zio.dev/api/zio/test/magnolia/index.html
 * don't use filter - transform instead
     * filtering = "throw away" data that doesn’t satisfy our predicate
