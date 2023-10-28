@@ -9,6 +9,6 @@ object RefinedTypesGenerators {
   val genNonEmptyString: Gen[Any, NonEmptyString] =
     Gen.stringBounded(1, 10)(Gen.char)
     .map(NonEmptyString.unsafeFrom)
-  implicit val deriveGenNonEmptyString = DeriveGen.instance(genNonEmptyString)
+  implicit val deriveGenNonEmptyString: DeriveGen[NonEmptyString] = DeriveGen.instance(genNonEmptyString)
 
 }
