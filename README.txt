@@ -14,6 +14,7 @@
     * https://docs.spring.io/spring-framework/docs/4.3.15.RELEASE/spring-framework-reference/html/aop.html
     * https://dotty.epfl.ch/docs/reference/new-types/polymorphic-function-types.html
     * https://github.com/zio/zio/issues/4601
+    * https://zio.dev/reference/test/property-testing/built-in-generators/
 
 ## preface
 
@@ -219,18 +220,55 @@
             ).map { case (uuid, status, str) => Account(AccountId(uuid), status, NonEmptyString.unsafeFrom(str))
           }
         ```
+    * problem: sealed non-enum traits
+        * we don't have access to all values
+            * you need to explicitly enumerate values
+            * every new case class should be added to generator
+                * example
+                    ```
+                    sealed trait TransactionParameters
+                    case class BitcoinTransactionParameters(...) extends TransactionParameters
+                    case class EthereumTransactionParameters(...) extends TransactionParameters
+                    case class XrpTransactionParameters(...) extends TransactionParameters
+
+                    val genTransactionParameters: Gen[Any, TransactionParameters] =
+                        Gen.oneOf(genBitcoinTxParams, genEthereumTxParams, genXrpTxParams)
+                    ```
+                * easy to forget
+                    * solution: auto-deriving generator
 * auto-deriving generator
-    * not recommended
-        * deriving is macro-based
-            * it is sometime hard to know which generators will be used
-                * especially in case of multi-files imports
-                * we cannot just use `show implicits` IJ option
-        * it is hard to maintain specific constraints in multi-file imports
-            * usually we require objects that are correct/valid for our tests
-                * correct/valid = not complete random
+    * mutual correspondence gen <-> derive
+        * gen -> derive: DeriveGen.instance(genA)
+            ```
+            val genA: Gen[Any, A] = ...
+            val deriveGenA: DeriveGen[A] = DeriveGen.instance(genA)
+            ```
+        * derive -> gen:
+            ```
+            val deriveGenA: DeriveGen[A] = ...
+            val genA: Gen[Any, A] = deriveGenA.derive
+            ```
+    * usually used for sealed non-enum hierarchies
+        * example
+            ```
+            sealed trait TransactionParameters
+            case class BitcoinTransactionParameters(...) extends TransactionParameters
+            case class EthereumTransactionParameters(...) extends TransactionParameters
+            case class XrpTransactionParameters(...) extends TransactionParameters
+
+            val deriveTransactionParameters: Gen[Any, TransactionParameters] =
+                DeriveGen[TransactionParameters]
+            ```
+    * deriving is macro-based
+        * it is sometimes hard to know which generators will be used
+            * especially in case of multi-files imports
+            * we cannot just use `show implicits` IJ option
+    * it is hard to maintain specific constraints in multi-file imports
+        * usually we require objects that are correct/valid for our tests
+            * correct/valid = not complete random
             * only one implicit for each type allowed
-        * not composable
-            * unpack the `DeriveGen` instance to get a `Gen` (composable)
+    * not composable
+        * solution: unpack the `DeriveGen` instance to get a `Gen` (composable)
     * example
         * from case classes
             ```
@@ -240,7 +278,7 @@
             ```
             val genActiveAccountStatus: Gen[Any, AccountStatus] = Gen.fromIterable(AccountStatus.activeStatuses)
 
-            implicit val deriveActiveAccountStatus = DeriveGen.instance(genActiveAccountStatus)
+            implicit val deriveActiveAccountStatus: DeriveGen[AccountStatus] = DeriveGen.instance(genActiveAccountStatus)
 
             val genActiveAccount: Gen[Any, Account] = DeriveGen[Account]
             ```
