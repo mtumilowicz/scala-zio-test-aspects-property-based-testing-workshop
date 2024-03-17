@@ -183,7 +183,16 @@
     }
     ```
 * is an approach where the framework generates test cases
-* use case: when something is hard to prove but easy to verify
+* strategies
+    1. hard to prove, easy to verify
+        * example: `sorting`
+    1. there and back again
+        * example: `reverse(reverse(list)) == list`
+    1. different paths same destination
+        * example: inverting binary tree
+            ```
+            invertTree(Node(Leaf, 0, t)) == Node(invertTree(t), 0, Leaf)
+            ```
 * advantage: allows to quickly test a large number of test cases
     * potentially: reveal not obvious counterexamples
 * typically generate ~ 100-200 test cases
