@@ -15,6 +15,7 @@
     * https://dotty.epfl.ch/docs/reference/new-types/polymorphic-function-types.html
     * https://github.com/zio/zio/issues/4601
     * https://zio.dev/reference/test/property-testing/built-in-generators/
+    * [Kacper Korban - Scala 3, but I have trust issues](https://www.youtube.com/watch?v=DiL4MMc60LU)
 
 ## preface
 
@@ -182,6 +183,7 @@
     }
     ```
 * is an approach where the framework generates test cases
+* use case: when something is hard to prove but easy to verify
 * advantage: allows to quickly test a large number of test cases
     * potentially: reveal not obvious counterexamples
 * typically generate ~ 100-200 test cases
